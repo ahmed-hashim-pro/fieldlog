@@ -18,7 +18,7 @@ import kotlin.system.exitProcess
 const val USAGE = """fieldlog: an offline-first field notebook for boreholes, and its tools
 
   fieldlog relay   [--host 127.0.0.1] [--port 8787] [--data relay.ops]
-  fieldlog import  <strata.csv> -o <notebook.ops> [--as NAME]
+  fieldlog import  <strata.csv> -o <notebook.ops> [--as DEVICE] [--site NAME]
   fieldlog export  <notebook.ops> [-o out.csv]        refuses, with reasons, if strata would
   fieldlog check   <notebook.ops>
   fieldlog show    <notebook.ops>
@@ -138,7 +138,7 @@ fun relay(a: Args): Int {
 }
 
 fun import(a: Args): Int {
-    a.known("-o", "--as")
+    a.known("-o", "--as", "--site")
     val src = one(a, "strata CSV")
     val out = a.get("-o") ?: throw UsageError("import needs -o <notebook.ops>")
     val r = Replica(a.get("--as") ?: "desk")
@@ -149,7 +149,7 @@ fun import(a: Args): Int {
     } catch (e: IllegalArgumentException) {
         throw IllegalArgumentException("$src: ${e.message}")
     }
-    if (nb.view().name.isEmpty()) nb.siteName(File(src).nameWithoutExtension)
+    nb.siteName(a.get("--site") ?: File(src).nameWithoutExtension)
     save(r, out)
     val v = nb.view()
     println("imported ${v.holes.size} holes and ${v.holes.sumOf { it.intervals.size }} intervals from $src into $out (${r.log.size} operations)")

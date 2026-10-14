@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A borehole column: four layers in a rounded square. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#5B4636" android:pathData="M8,6h32a4,4 0 0 1 4,4v28a4,4 0 0 1 -4,4H8a4,4 0 0 1 -4,-4V10a4,4 0 0 1 4,-4z" />
+    <path android:fillColor="#8D6E4F" android:pathData="M4,10a4,4 0 0 1 4,-4h32a4,4 0 0 1 4,4v4H4z" />
+    <path android:fillColor="#C9A66B" android:pathData="M4,14h40v9H4z" />
+    <path android:fillColor="#E4D3A8" android:pathData="M4,23h40v8H4z" />
+    <path android:fillColor="#F3F0E6" android:pathData="M4,31h40v7a4,4 0 0 1 -4,4H8a4,4 0 0 1 -4,-4z" />
+    <path android:fillColor="#1F2933" android:pathData="M22,4h4v38h-4z" />
+</vector>
