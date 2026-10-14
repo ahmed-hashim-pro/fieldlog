@@ -58,18 +58,19 @@ You need Docker. Nothing else is installed on the host.
 ```bash
 git clone https://github.com/ahmed-hashim-pro/fieldlog.git && cd fieldlog
 
-make test     # the CRDT, fuzzer, strata export, relay and CLI: 33 JVM tests, about a minute
+make test     # the CRDT, fuzzer, strata export, relay and CLI: 33 JVM tests
 make apk      # app/build/outputs/apk/debug/app-debug.apk, built in a container with the Android SDK
 make cli      # cli/build/install/fieldlog/bin/fieldlog
 ```
 
-The first `make apk` builds the SDK image and downloads Gradle's dependencies,
-which takes several minutes.
+The first run of each downloads Gradle and its dependencies: `make test` took
+4 minutes from a fresh clone, then under a minute. The first `make apk` also
+builds an image with the Android SDK.
 
 Run a relay, then point the app at it:
 
 ```bash
-docker run --rm -p 8787:8787 -v "$PWD:/w" -w /w eclipse-temurin:17-jdk \
+docker run --rm -u "$(id -u):$(id -g)" -p 8787:8787 -v "$PWD:/w" -w /w eclipse-temurin:17-jdk \
   cli/build/install/fieldlog/bin/fieldlog relay --host 0.0.0.0 --data relay.ops
 ```
 
@@ -84,7 +85,7 @@ relay:
 
 ```bash
 B=cli/build/install/fieldlog/bin/fieldlog
-docker run --rm --network host -v "$PWD:/w" -w /w eclipse-temurin:17-jdk sh -c \
+docker run --rm --network host -u "$(id -u):$(id -g)" -v "$PWD:/w" -w /w eclipse-temurin:17-jdk sh -c \
   "$B import examples/site.csv -o /tmp/site.ops --site Riverside && $B push /tmp/site.ops --relay http://127.0.0.1:8787"
 ```
 
