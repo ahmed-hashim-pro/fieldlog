@@ -74,10 +74,15 @@ class LoggingTest {
         compose.onNodeWithTag("addHole").performClick()
         compose.onNodeWithTag("holeName").performTextInput("TP3")
         compose.onNodeWithTag("notes").performScrollTo().performTextInput("Seepage at 1.1 m.")
+        val typed = hasTestTag("notes") and hasText("Seepage at 1.1 m.", substring = true)
+        compose.waitUntil(5_000) { compose.onAllNodes(typed).fetchSemanticsNodes().isNotEmpty() }
         scenario?.close()
+
         scenario = ActivityScenario.launch(MainActivity::class.java)
+        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("hole:TP3")).fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("hole:TP3").performClick()
-        compose.onNode(hasTestTag("notes") and hasText("Seepage at 1.1 m.", substring = true)).performScrollTo().assertIsDisplayed()
+        compose.waitUntil(10_000) { compose.onAllNodes(typed).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(typed).performScrollTo().assertIsDisplayed()
         compose.onNode(hasTestTag("status") and hasText("changes not sent", substring = true)).assertIsDisplayed()
     }
 
